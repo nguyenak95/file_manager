@@ -1,33 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
 
+import "./App.css"
+
+const API_URL = import.meta.env.API_URL || "http"
+const makeGetFolderContentUrl = (path: string) => {
+  if (!path) {
+    return `${API_URL}/fs?path=root`
+  }
+  return `${API_URL}/fs?path=${encodeURIComponent("root/" + path)}`
+}
+
+const Folder = ({
+  name,
+  path,
+  isExpanded = false,
+}: {
+  name: string
+  path?: string
+  isExpanded?: boolean
+}) => {
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const loadFolderContent = async () => {
+    if (isLoading) return
+    setIsLoading(true)
+    const result = await fetch(makeGetFolderContentUrl(path))
+      .then((rs) => rs.json())
+      .then(setData)
+    setIsLoading(false)
+  }
+
+  console.log(data)
+
+  return (
+    <div>
+      <div onClick={loadFolderContent}>{name}</div>
+      {isExpanded && <div>{data}</div>}
+    </div>
+  )
+}
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Folder name="root" />
     </>
   )
 }
