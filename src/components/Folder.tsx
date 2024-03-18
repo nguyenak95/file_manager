@@ -2,6 +2,7 @@ import { useState } from "react"
 import { DownArrow, RightArrow } from "../icons"
 import { handleFetchResponse, makeGetFolderContentUrl } from "../utils"
 import { File } from "./File"
+import { Spinner } from "./Spinner"
 
 export type FileFolder = { name: string; type: "file" | "directory" }
 export type FolderResponse = {
@@ -18,9 +19,8 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
     if (isLoading) return
     setIsLoading(true)
     const fetchCall = fetch(makeGetFolderContentUrl(path))
-    await handleFetchResponse<FolderResponse>(fetchCall).then(
-      // console.log
-      (rs) => setData(rs ? rs.entries : null)
+    await handleFetchResponse<FolderResponse>(fetchCall).then((rs) =>
+      setData(rs && rs.entries.length > 0 ? rs.entries : null)
     )
     setIsLoading(false)
   }
@@ -40,6 +40,8 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
       </div>
       {isExpanded && (
         <div className="ml-2">
+          {!data && <i className="empty__text">Folder is empty</i>}
+          {isLoading && <Spinner />}
           {data &&
             data.map((fileFolder) =>
               fileFolder.type === "directory" ? (
@@ -49,7 +51,11 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
                   path={`${path ? path + "/" : ""}${fileFolder.name}`}
                 />
               ) : (
-                <File key={fileFolder.name} name={fileFolder.name} path=""/>
+                <File
+                  key={fileFolder.name}
+                  name={fileFolder.name}
+                  path={`${path ? path + "/" : ""}${fileFolder.name}`}
+                />
               )
             )}
         </div>
