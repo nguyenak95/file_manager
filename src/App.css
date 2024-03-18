@@ -6,9 +6,14 @@ body {
   display: block !important;
 }
 
-.folder__name {
+.folder__name, .file__name {
   margin-left: 0.5rem;
 }
+
 .ml-2 {
   margin-left: 2rem;
+}
+
+.pointer {
+  cursor: pointer;
 }
