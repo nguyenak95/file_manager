@@ -34,10 +34,10 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
 
   return (
     <div className="pointer">
-      <div onClick={expandFolder}>
+      <span onClick={expandFolder}>
         {isExpanded ? <DownArrow /> : <RightArrow />}
         <span className="folder__name">{name}</span>
-      </div>
+      </span>
       {isExpanded && (
         <div className="ml-2">
           {!data && <i className="empty__text">Folder is empty</i>}
