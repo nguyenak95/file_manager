@@ -1,27 +1,25 @@
-import { useState } from "react"
-import { handleFetchResponse, makeGetFolderContentUrl } from "../utils"
-import { FileFolder, FolderResponse } from "./Folder"
+import { useContext, useState } from "react"
+import { ModalContext } from "../context"
 import { JSIcon } from "../icons"
+import { handleFetchResponse, makeGetFolderContentUrl } from "../utils"
+
+export type FileResponse = {
+  id: string
+  contents: string
+}
 
 export const File = ({ name, path }: { name: string; path: string }) => {
-  const [data, setData] = useState<FileFolder[] | null>([])
   const [isLoading, setIsLoading] = useState(false)
+  const { toggleModal, setModalContent } = useContext(ModalContext)
 
-  const loadFileContent = async () => {
+  const showFileContent = async () => {
     if (isLoading) return
     setIsLoading(true)
     const fetchCall = fetch(makeGetFolderContentUrl(path))
-    await handleFetchResponse<FolderResponse>(fetchCall).then(
-      // console.log
-      (rs) => setData(rs ? rs.entries : null)
-    )
+    const file = await handleFetchResponse<FileResponse>(fetchCall)
+    setModalContent(file?.contents || "Not found file content")
     setIsLoading(false)
-  }
-
-  const showFileContent = () => {
-    if (data !== null && data.length === 0) {
-      loadFileContent()
-    }
+    toggleModal()
   }
 
   return (
