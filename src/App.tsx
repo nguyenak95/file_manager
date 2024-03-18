@@ -23,11 +23,18 @@ const DownArrow = ({ size = 12 }: { size?: number }) => (
   </svg>
 )
 const API_URL = import.meta.env.API_URL || "http://localhost:8080"
+
+type FileFolder = { name: string; type: "file" | "directory" }
+type FolderResponse = {
+  id: string
+  entries: FileFolder[]
+}
+
 const makeGetFolderContentUrl = (path: string) => {
   if (!path) {
     return `${API_URL}/fs?path=root`
   }
-  return `${API_URL}/fs?path=${encodeURIComponent("root/" + path)}`
+  return `${API_URL}/fs?path=${encodeURIComponent(path)}`
 }
 
 async function handleFetchResponse<T>(
@@ -53,7 +60,7 @@ const makeFetchCallWithCancel = (url: string, options?: RequestInit) => {
 }
 
 const Folder = ({ name, path }: { name: string; path: string }) => {
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<FileFolder[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -61,12 +68,16 @@ const Folder = ({ name, path }: { name: string; path: string }) => {
     if (isLoading) return
     setIsLoading(true)
     const fetchCall = fetch(makeGetFolderContentUrl(path))
-    const result = await handleFetchResponse(fetchCall)
+    await handleFetchResponse<FolderResponse>(fetchCall).then(
+      // console.log
+      (rs) => setData(rs.entries)
+    )
     setIsLoading(false)
   }
+
   const expandFolder = () => {
     setIsExpanded((s) => !s)
-    if (!data) {
+    if (data.length === 0) {
       loadFolderContent()
     }
   }
@@ -77,10 +88,25 @@ const Folder = ({ name, path }: { name: string; path: string }) => {
         {isExpanded ? <DownArrow /> : <RightArrow />}
         <span className="folder__name">{name}</span>
       </div>
-      {isExpanded && <div>{data}</div>}
+      {isExpanded && (
+        <div className="ml-2">
+          {data.map((fileFolder) =>
+            fileFolder.type === "directory" ? (
+              <Folder
+                key={fileFolder.name}
+                name={fileFolder.name}
+                path={`${path ? path + "/" : ""}${fileFolder.name}`}
+              />
+            ) : (
+              <div>{fileFolder.name}</div>
+            )
+          )}
+        </div>
+      )}
     </div>
   )
 }
+
 function App() {
   return (
     <>
