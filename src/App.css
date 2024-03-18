@@ -6,7 +6,8 @@ body {
   display: block !important;
 }
 
-.folder__name, .file__name {
+.folder__name,
+.file__name {
   margin-left: 0.5rem;
 }
 
@@ -16,4 +17,73 @@ body {
 
 .pointer {
   cursor: pointer;
+}
+
+.dialog__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.dialog__backdrop:before {
+  content: "";
+  background-image: linear-gradient(
+    45deg,
+    rebeccapurple,
+    dodgerblue,
+    green
+  );
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.dialog__body {
+  background: white;
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog__content {
+  border: 1px solid black;
+  color: grey;
+  height: calc(100% - 1.2rem - 1rem);
+  max-height: calc(100% - 1.2rem - 1rem);
+  margin: 1rem;
+  overflow-y: scroll;
+}
+
+.empty__text {
+  margin-left: 2rem;
+  color: lightgrey;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
