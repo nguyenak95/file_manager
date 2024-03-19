@@ -16,7 +16,6 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const loadFolderContent = async () => {
-    if (isLoading) return
     setIsLoading(true)
     const fetchCall = fetch(makeGetFolderContentUrl(path))
     await handleFetchResponse<FolderResponse>(fetchCall).then((rs) =>
@@ -34,7 +33,7 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
 
   return (
     <div className="pointer">
-      <span onClick={expandFolder}>
+      <span data-testid={`folder-${name}`} onClick={expandFolder}>
         {isExpanded ? <DownArrow /> : <RightArrow />}
         <span className="folder__name">{name}</span>
       </span>

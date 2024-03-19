@@ -1,3 +1,3 @@
 export const Spinner = () => {
-    return <div className="loader"></div>
+    return <div data-testid="spinner" className="loader"></div>
 }
