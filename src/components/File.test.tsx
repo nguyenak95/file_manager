@@ -37,7 +37,7 @@ describe("file render", () => {
         name={name}
       />
     )
-    expect(screen.getByText(/fileName/i)).toBeInTheDocument()
+    expect(screen.getByText(name)).toBeInTheDocument()
 
     const fileNameLabel = await screen.findByTestId(`file-${name}`)
     fireEvent.click(fileNameLabel)
