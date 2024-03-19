@@ -13,7 +13,6 @@ export const File = ({ name, path }: { name: string; path: string }) => {
   const { toggleModal, setModalContent } = useContext(ModalContext)
 
   const showFileContent = async () => {
-    if (isLoading) return
     setIsLoading(true)
     const fetchCall = fetch(makeGetFolderContentUrl(path))
     const file = await handleFetchResponse<FileResponse>(fetchCall)
@@ -23,11 +22,17 @@ export const File = ({ name, path }: { name: string; path: string }) => {
   }
 
   return (
-    <div className="pointer">
-      <div onClick={showFileContent}>
-        <JSIcon />
+    <div
+      className="pointer"
+      data-testid={`file-${name}`}
+      onClick={showFileContent}
+    >
+      <JSIcon />
+      {isLoading ? (
+        <i className="empty__text">Loading file content</i>
+      ) : (
         <span className="file__name">{name}</span>
-      </div>
+      )}
     </div>
   )
 }
