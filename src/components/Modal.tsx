@@ -7,7 +7,7 @@ export const Modal = ({
 }) => (
   <div className="dialog__backdrop">
     <div className="dialog__body">
-      <div className="dialog__content">{content}</div>
+      <div className="dialog__content" data-testid="modal">{content}</div>
       <button onClick={toggleModal}>Close</button>
     </div>
   </div>

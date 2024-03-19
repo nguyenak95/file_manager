@@ -22,9 +22,3 @@ export async function handleFetchResponse<T>(
   }
   return result
 }
-
-export const makeFetchCallWithCancel = (url: string, options?: RequestInit) => {
-  const abortController = new AbortController()
-  const fetchCall = fetch(url, { ...options, signal: abortController.signal })
-  return { abortController, fetchCall }
-}
