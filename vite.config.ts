@@ -10,10 +10,11 @@ export default defineConfig({
   test: {
     coverage: {
       enabled: true,
+      exclude: ["src/main.tsx", ".eslintrc.cjs"]
     },
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/setupTest.ts',
+    setupFiles: './src/test-utils/setupTest.ts',
     css: true,
   },
 })
