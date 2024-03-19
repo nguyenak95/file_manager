@@ -22,16 +22,18 @@ export const File = ({ name, path }: { name: string; path: string }) => {
   }
 
   return (
-    <div
-      className="pointer"
-      data-testid={`file-${name}`}
-      onClick={showFileContent}
-    >
+    <div>
       <JSIcon />
       {isLoading ? (
         <i className="empty__text">Loading file content</i>
       ) : (
-        <span className="file__name">{name}</span>
+        <span
+          data-testid={`file-${name}`}
+          onClick={showFileContent}
+          className="file__name"
+        >
+          {name}
+        </span>
       )}
     </div>
   )

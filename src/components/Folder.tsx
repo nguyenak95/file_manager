@@ -32,7 +32,7 @@ export const Folder = ({ name, path }: { name: string; path: string }) => {
   }
 
   return (
-    <div className="pointer">
+    <div>
       <span data-testid={`folder-${name}`} onClick={expandFolder}>
         {isExpanded ? <DownArrow /> : <RightArrow />}
         <span className="folder__name">{name}</span>

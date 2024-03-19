@@ -9,6 +9,7 @@ body {
 .folder__name,
 .file__name {
   margin-left: 0.5rem;
+  cursor: pointer;
 }
 
 .ml-2 {
